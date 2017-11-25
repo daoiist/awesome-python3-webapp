@@ -8,7 +8,7 @@ from aiohttp import web
 
 from models import User, next_id
 
-from apis import APIValueError, APIResourceNotFoundError
+from apis import APIValueError, APIResourceNotFoundError,APIError
 
 from config import configs
 
