@@ -80,6 +80,12 @@ def register():
         '__template__': 'register.html'
     }
 
+@get('/settings')
+def settings():
+    return {
+        '__template__': 'settings.html'
+    }
+
 @get('/signin')
 def signin():
     return {
@@ -158,3 +164,11 @@ async def api_register_user(*, email, name, passwd):
     r.content_type = 'application/json'
     r.body = json.dumps(user, ensure_ascii=False).encode('utf-8')
     return r
+
+@post('/api/settings')
+async def api_user_settings(request,*, nickname, phone, address,introduce):
+    check_admin(request)
+    settings = Settings(user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image,
+                nickname=nickname.strip(), phone=phone.strip(), address=address.strip(), introduce=introduce.strip())
+    yield from settings.save()
+    return settings
