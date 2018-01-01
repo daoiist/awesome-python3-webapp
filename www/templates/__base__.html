@@ -4,12 +4,13 @@
     <meta charset="utf-8" />
     {% block meta %}<!-- block meta  -->{% endblock %}
     <title>{% block title %} ? {% endblock %} - 科研管理系统</title>
-    <link rel="stylesheet" href="/static/css/uikit.min.css">
-    <link rel="stylesheet" href="/static/css/uikit.gradient.min.css">
+    <link rel="stylesheet" href="/static/css/uikit.almost-flat.css">
+    <link rel="stylesheet" href="/static/css/uikit.almost-flat.min.css">
     <link rel="stylesheet" href="/static/css/awesome.css" />
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/sha1.min.js"></script>
     <script src="/static/js/uikit.min.js"></script>
+    <script src="/static/js/uikit.js"></script>
     <script src="/static/js/sticky.min.js"></script>
     <script src="/static/js/vue.min.js"></script>
     <script src="/static/js/awesome.js"></script>
@@ -20,9 +21,9 @@
         <div class="uk-container uk-container-center">
             <a href="/" class="uk-navbar-brand">科研管理系统</a>
             <ul class="uk-navbar-nav">
-                <li data-url="blogs"><a href="/"><i class="uk-icon-home"></i> 日志</a></li>
-                <li><a target="_blank" href="/"><i class="uk-icon-book"></i> 教程</a></li>
-                <li><a target="_blank" href="/"><i class="uk-icon-code"></i> 源码</a></li>
+                <li data-url="blogs"><a href="/"><i class="uk-icon-home"></i> 首页</a></li>
+                <li><a target="_blank" href=""><i class="uk-icon-question"></i> 常见问题</a></li>
+                <li><a target="_blank" href=""><i class="uk-icon-phone"></i> 联系我们</a></li>
             </ul>
             <div class="uk-navbar-flip">
                 <ul class="uk-navbar-nav">
@@ -46,11 +47,24 @@
     </nav>
 
     <div class="uk-container uk-container-center">
-        <div class="uk-grid">
-            <!-- content -->
-            {% block content %}
-            {% endblock %}
-            <!-- // content -->
+        <div class="uk-grid uk-grid-divider">
+            <div class="uk-width-1-5">
+                <ul class="uk-nav uk-nav-side">
+                    <li><a href="">指南发布</a></li>
+                    <li class="uk-active"><a href="">立项策划</a></li>
+                    <li><a href="">中期执行情况检查</a></li>
+                    <li><a href="">年底科研进度检查</a></li>
+                    <li><a href="">所内结题验收</a></li>
+                    <li><a href="">所外结题验收</a></li>
+                    <li><a href="">资料归档</a></li>
+                </ul>
+            </div>
+            <div class="uk-width-4-5">
+                <!-- content -->
+                {% block content %}
+                {% endblock %}
+                <!-- // content -->
+            </div>
         </div>
     </div>
 
@@ -58,7 +72,7 @@
         <div class="uk-container uk-container-center uk-text-center">
             <div class="uk-panel uk-margin-top uk-margin-bottom">
                 <p>
-                    <a target="_blank" href="/" class="uk-icon-button"></a>
+                    <a target="_blank" href="/" class="uk-icon-finger"></a>
 
                 </p>
                 <p>Powered by <a href="/">flask</a>. Copyright &copy; 2017. [<a href="/manage/" target="_blank">Manage</a>]</p>

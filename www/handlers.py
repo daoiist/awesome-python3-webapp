@@ -68,10 +68,8 @@ async def cookie2user(cookie_str):
 
 @get('/')
 async def index(request):
-    users = await User.findAll()
     return {
-        '__template__': 'test.html',
-        'users': users
+        '__template__': 'index.html'
     }
 
 @get('/register')
@@ -81,9 +79,13 @@ def register():
     }
 
 @get('/settings')
-def settings():
+def settings(request):
+    id=request.__user__.id
+    name=request.__user__.name
     return {
-        '__template__': 'settings.html'
+    '__template__': 'settings.html',
+    'id':id,
+    'name':name
     }
 
 @get('/signin')
@@ -139,6 +141,12 @@ async def api_get_users():
         u.passwd = '******'
     return dict(users=users)
 
+@get('/api/users/{id}')
+async def api_get_users_id(*, id):
+    users = await User.find(id)
+    users.passwd='******'
+    return users
+
 _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
 _RE_SHA1 = re.compile(r'^[0-9a-f]{40}$')
 
@@ -155,7 +163,7 @@ async def api_register_user(*, email, name, passwd):
         raise APIError('register:failed', 'email', 'Email is already in use.')
     uid = next_id()
     sha1_passwd = '%s:%s' % (uid, passwd)
-    user = User(id=uid, name=name.strip(), email=email, passwd=hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest(), image='http://www.gravatar.com/avatar/%s?d=mm&s=120' % hashlib.md5(email.encode('utf-8')).hexdigest())
+    user = User(id=uid, name=name.strip(), email=email, passwd=hashlib.sha1(sha1_passwd.encode('utf-8')).hexdigest(), image='http://www.gravatar.com/avatar/%s?d=mm&s=120' % hashlib.md5(email.encode('utf-8')).hexdigest(),nickname='',address='',phone='',introduce='')
     await user.save()
     # make session cookie:
     r = web.Response()
@@ -165,10 +173,17 @@ async def api_register_user(*, email, name, passwd):
     r.body = json.dumps(user, ensure_ascii=False).encode('utf-8')
     return r
 
-@post('/api/settings')
-async def api_user_settings(request,*, nickname, phone, address,introduce):
-    check_admin(request)
-    settings = Settings(user_id=request.__user__.id, user_name=request.__user__.name, user_image=request.__user__.image,
-                nickname=nickname.strip(), phone=phone.strip(), address=address.strip(), introduce=introduce.strip())
-    yield from settings.save()
+@post('/api/settings/{id}')
+async def api_update_settings(id,*, nickname, phone, address,introduce):
+    settings = await User.find(id)
+    settings.nickname=nickname
+    settings.phone=phone
+    settings.address=address
+    settings.introduce=introduce
+    await settings.update()
+    return settings
+
+@get('/api/settings/{id}')
+async def api_user_settings(*,id):
+    settings=await User.find(id)
     return settings

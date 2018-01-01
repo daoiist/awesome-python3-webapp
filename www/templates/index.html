@@ -1,0 +1,19 @@
+{% extends '__base__.html' %}
+
+{% block title %} 首页 {% endblock %}
+
+{% block beforehead %}
+
+{% endblock %}
+
+{% block content %}
+    <h1>首页</h1>
+    <div>
+        {% if __user__ %}
+            <p>abc</p>
+        {% else %}
+            <a href="/signin"><i class="uk-icon-sign-in"></i> 请登陆</a>
+        {% endif %}
+    </div>
+
+{% endblock %}
